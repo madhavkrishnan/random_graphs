@@ -4,11 +4,12 @@ using LinearAlgebra
 using Graphs
 
 silent = false
-plot_graph = false
+
+# Turn this off for larger graphs
+plot_graph = true 
 
 # Load circuit from qasm file. 
-qubits, input_circuit = load_icm_circuit_from_qasm("random_circuit_d1000_q100.qasm")
-
+qubits, input_circuit = load_icm_circuit_from_qasm("random_circuit_d100_q100.qasm")
 
 
 if ! silent
