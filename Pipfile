@@ -5,6 +5,10 @@ name = "pypi"
 
 [packages]
 cirq = "*"
+benchq = {path = "/home/madhav/software/benchq"}
+orquestra = "*"
+confapp = "*"
+stim = "*"
 
 [dev-packages]
 

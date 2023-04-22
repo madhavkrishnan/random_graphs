@@ -2,14 +2,19 @@ using Jabalizer
 using GraphPlot
 using LinearAlgebra
 using Graphs
+using Printf
 
-silent = false
+silent = true
 
 # Turn this off for larger graphs
-plot_graph = true 
+plot_graph = false 
+
+# input_file = "TRANSPILED_FH_N2_U2_mu0.0_eps0.01_t1_angles5_recompiled.qasm"
+input_file = "FH_N2_U2_mu0.0_recompiled.qasm"
 
 # Load circuit from qasm file. 
-qubits, input_circuit = load_icm_circuit_from_qasm("random_circuit_d100_q100.qasm")
+println("Loading : ", input_file)
+qubits, input_circuit = load_icm_circuit_from_qasm(input_file)
 
 
 if ! silent
@@ -20,8 +25,11 @@ if ! silent
 end
 
 
+println("Starting Graph conversion...")
+ts = time()
+
 # Icm decomposition
-gates_to_decomp = ["T", "T^-1"];
+gates_to_decomp = ["T", "T_Dagger", "RX", "RY", "RZ"];
 icm_circuit, data_qubits = Jabalizer.compile(input_circuit, qubits, gates_to_decomp)
 n_qubits = Jabalizer.count_qubits(icm_circuit)
 
@@ -38,6 +46,9 @@ state = zero_state(n_qubits);
 # Apply the ICM circuit
 Jabalizer.execute_circuit(state, icm_circuit);
 graph_state, adj_mat, loc_seq = Jabalizer.to_graph(state);
+
+@printf("Graph generation time : %.2f sec", time() - ts)
+
 
 # Check that the adjaceny matrix is symmetric
 issymmetric(adj_mat) || error("Adjacency Matrix is not symmetric.")
